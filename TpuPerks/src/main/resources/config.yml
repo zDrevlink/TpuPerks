@@ -1,0 +1,61 @@
+# =========================================================
+#  TpuPerks - Configuración
+# =========================================================
+
+settings:
+  # Cada cuántos niveles de experiencia el jugador gana 1 Perk Point.
+  levels-per-point: 20
+
+  # Nivel mínimo de experiencia que el jugador debe mantener para que
+  # sus perks activos sigan funcionando. Si baja de este umbral
+  # (por ejemplo al gastar niveles en un yunque), sus perks se desactivan
+  # automáticamente hasta que vuelva a superarlo.
+  min-level-threshold: 10
+
+  # Cada cuántos ticks (20 ticks = 1 segundo) se revisa que los jugadores
+  # online sigan cumpliendo el umbral mínimo. No hace falta que sea instantáneo.
+  threshold-check-interval-ticks: 100
+
+  # Rango máximo que se puede comprar de cada perk. 0 = sin límite (infinito).
+  # Ejemplo: si quieres permitir hasta 20 corazones extra, con perk-values.health=2.0
+  # (cada rango = 1 corazón = 2.0 de vida), pon max-rank: 20 o déjalo en 0 para infinito.
+  max-rank: 0
+
+  # Fórmula de costo en puntos para subir de rango: cost = base + (increment * rango_actual)
+  # Con los valores por defecto: rango 0->1 cuesta 1, 1->2 cuesta 2, 2->3 cuesta 3, etc.
+  cost:
+    base: 1
+    increment-per-rank: 1
+
+# Valor que aporta CADA rango de los perks que no usan amplifier de PotionEffect
+# (Strength, Speed, Resistance y Haste escalan directo por amplifier: rango 1 = nivel I,
+# rango 2 = nivel II, etc. y no se configuran aquí).
+perk-values:
+  # 2.0 puntos de vida = 1 corazón. Con esto, rango 20 = +20 corazones extra.
+  health: 2.0
+  # Bloques de alcance añadidos por rango (aplica tanto a interacción de bloques como de entidades).
+  reach: 1.0
+
+  # Segundos que arde el objetivo golpeado por un jugador con el perk "Incinerador" activo.
+  incinerator-fire-seconds: 4
+
+  # Pesos relativos (no tienen que sumar 100, se normalizan solos) para sortear cuántos
+  # encantamientos (0 a 5) recibe un ítem crafteado con "Maestría del Artesano" activo.
+  # Cuanto MÁS ALTO el peso, MÁS PROBABLE ese resultado. Por defecto: 0 es lo más probable
+  # y 5 lo menos probable, tal como se pidió (progresión exponencial decreciente).
+  craftsman:
+    weight-0: 45   # 0 encantamientos: el resultado más común, ni una probabilidad garantizada.
+    weight-1: 25
+    weight-2: 15
+    weight-3: 9
+    weight-4: 4
+    weight-5: 2    # 5 encantamientos: rarísimo.
+
+# Nota sobre perks ÚNICOS (double_jump, incinerator, craftsman_mastery): no escalan por
+# rango (no tienen niveles I, II, III...). Su costo se calcula igual que el resto con la
+# fórmula de settings.cost (base + increment * rango_actual), pero como su rango solo
+# puede ser 0 o 1, en la práctica siempre cuestan "settings.cost.base" puntos.
+#
+# "Maestría del Artesano" (craftsman_mastery) además exige que el jugador tenga nivel
+# de experiencia 100 o más tanto para COMPRARLO como para mantenerlo ACTIVO, sin importar
+# lo que diga settings.min-level-threshold (ese requisito es adicional, no lo reemplaza).
